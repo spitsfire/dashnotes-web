@@ -34,7 +34,12 @@ class App extends React.Component {
         headers: { "Access-Control-Allow-Headers": "X-Requested-With, content-type" }
       })
       .then((response) => {
-        console.log("THIS COOL RESPONSE FROM GITHUB", response);
+        console.log('this should be just user data from our api now', response);
+        this.setState({
+          name: response.data.name,
+          username: response.data.username,
+          avatar_url: response.data.avatar_url
+        });
       })
       .catch((e) => { console.log(e, "errrorr");})
     } else {
@@ -159,6 +164,9 @@ class App extends React.Component {
 
     return (
       <div>
+        <h1>{this.state.name}</h1>
+        <h2>{this.state.username}</h2>
+        <img src={this.state.avatar_url} alt="lol" />
         <input type="text" onChange={this.onChangeName}></input>
         <p>{this.state.token}</p>
         <a
