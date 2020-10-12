@@ -2,7 +2,10 @@ import React, { useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { render } from '@testing-library/react';
+import { config } from './Constants'
 const axios = require('axios').default;
+
+const URL = config.url.API_URL
 
 class App extends React.Component {
 
@@ -16,16 +19,32 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    // localStorage.setItem('REACT_TOKEN_AUTH', 'bullshit');
     const code =
       window.location.href.match(/\/?code=(.*)/) &&
       window.location.href.match(/\/?code=(.*)/)[1];
-    console.log(code);
+    if (code) {
+      console.log(code);
+      const CLIENT_ID = process.env.REACT_APP_GITHUB_CLIENT_ID;
+      const CLIENT_SECRET = process.env.REACT_APP_GITHUB_CLIENT_SECRET;
+      axios.post(`${URL}/whatever/github/${code}`, {
+        client_id: CLIENT_ID,
+        client_secret: CLIENT_SECRET,
+        code: code,
+      }, {
+        headers: { "Access-Control-Allow-Headers": "X-Requested-With, content-type" }
+      })
+      .then((response) => {
+        console.log("THIS COOL RESPONSE FROM GITHUB", response);
+      })
+      .catch((e) => { console.log(e, "errrorr");})
+    } else {
+      console.log("NO CODE");
+    }
   }
 
   getStickies() {
     const token = localStorage.getItem('REACT_TOKEN_AUTH')
-    axios.get('http://localhost:5000/stickies', {
+    axios.get(`${URL}/stickies`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
@@ -51,7 +70,7 @@ class App extends React.Component {
     // const url = `https://github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}`
     
     // auth with BE logic and get a user auth_token. save it to localstorage
-    const url = `http://localhost:5000/authenticate/${this.state.username}`
+    const url = `${URL}/authenticate/${this.state.username}`
 
       axios.get(url, {
         headers: { 'Content-Type': 'application/json' }
@@ -78,7 +97,7 @@ class App extends React.Component {
 
   getMyStickies() {
     const token = localStorage.getItem('REACT_TOKEN_AUTH')
-    axios.get('http://localhost:5000/my-stickies', {
+    axios.get(`${URL}/my-stickies`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -102,7 +121,7 @@ class App extends React.Component {
     console.log('lolololasfjlksdjf', this.state.newSticky);
 
     const token = localStorage.getItem('REACT_TOKEN_AUTH')
-    axios.post('http://localhost:5000/my-stickies', {
+    axios.post(`${URL}/my-stickies`, {
       body: this.state.newSticky
     }, {
       headers: {
@@ -137,7 +156,6 @@ class App extends React.Component {
     })
 
     const CLIENT_ID = process.env.REACT_APP_GITHUB_CLIENT_ID
-    const REDIRECT_URI = 'http://localhost:3000/auth/github'
 
     return (
       <div>
