@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/dashnotes-web/precache-manifest.ce5e51bd70339b6ec318d7d878c5ee98.js"
+  "/dashnotes-web/precache-manifest.8fcaf55a115df59ecb56b4e5aebc8ca7.js"
 );
 
 self.addEventListener('message', (event) => {

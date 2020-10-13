@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "29b530377fc7698126f5b4fd969f97c5",
+    "revision": "98f61f7d0d20d3fda8c500eee41d156e",
     "url": "/dashnotes-web/index.html"
   },
   {
-    "revision": "83a625c55b554a671a6f",
+    "revision": "b10e2059a155f9cbda43",
     "url": "/dashnotes-web/static/css/main.5f361e03.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/dashnotes-web/static/js/2.f23ca445.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "83a625c55b554a671a6f",
-    "url": "/dashnotes-web/static/js/main.664dd219.chunk.js"
+    "revision": "b10e2059a155f9cbda43",
+    "url": "/dashnotes-web/static/js/main.690dffa8.chunk.js"
   },
   {
     "revision": "3dea66039d8c67ff3506",
