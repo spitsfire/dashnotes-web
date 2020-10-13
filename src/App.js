@@ -38,7 +38,8 @@ class App extends React.Component {
             name: response.data.name,
             username: response.data.username,
             avatar_url: response.data.avatar_url
-          }
+          },
+          stickies: response.data.stickies
         });
       })
       .catch((e) => { console.log('getting details about the user from be didn\'t work', e); });
@@ -54,7 +55,8 @@ class App extends React.Component {
             name: response.data.name,
             username: response.data.username,
             avatar_url: response.data.avatar_url
-          }
+          },
+          stickies: response.data.stickies
         });
         localStorage.setItem('DASHNOTES_AUTH_CODE', response.data.auth_code);
       })
@@ -171,7 +173,6 @@ class App extends React.Component {
 
         <section>
           <h2>My Stickies</h2>
-          <button onClick={this.onClickMyStickies}>Get My Stickies</button>
           <ul>
             {stickies}
           </ul>
