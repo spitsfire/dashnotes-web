@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { render } from '@testing-library/react';
 import { config } from './Constants'
 const axios = require('axios').default;
 
@@ -142,7 +140,7 @@ class App extends React.Component {
 
   render() {
     const stickies = this.state.stickies.map( (sticky) => {
-      return (<li>
+      return (<li key={sticky.id}>
         <p>{sticky.body}</p>
         <p>{sticky.username}</p>
       </li>)
