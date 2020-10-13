@@ -22,24 +22,48 @@ class App extends React.Component {
     const code =
       window.location.href.match(/\/?code=(.*)/) &&
       window.location.href.match(/\/?code=(.*)/)[1];
-    if (code) {
-      console.log(code);
-      const CLIENT_ID = process.env.REACT_APP_GITHUB_CLIENT_ID;
-      const CLIENT_SECRET = process.env.REACT_APP_GITHUB_CLIENT_SECRET;
-      axios.post(`${URL}/whatever/github/${code}`, {
-        client_id: CLIENT_ID,
-        client_secret: CLIENT_SECRET,
-        code: code,
-      }, {
-        headers: { "Access-Control-Allow-Headers": "X-Requested-With, content-type" }
+
+    const token = localStorage.getItem('DASHNOTES_AUTH_CODE');
+
+    if (token) {
+
+      axios.get(`${URL}/users`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
       })
       .then((response) => {
-        console.log('this should be just user data from our api now', response);
+        console.log('response', response);
         this.setState({
           name: response.data.name,
           username: response.data.username,
           avatar_url: response.data.avatar_url
         });
+      })
+      .catch((error) => {
+
+      });
+    } else if (code) {
+      console.log(code);
+      axios.post(`${URL}/auth/callback/gh/${code}`, {
+        code: code,
+      }, {
+        headers: { "Access-Control-Allow-Headers": "X-Requested-With, content-type" }
+      })
+      .then((response) => {
+        console.log('this should be a cool encoded token')
+        console.log(response);
+        // axios.post(`${URL}/getUser`, {
+        //   access_token: response.
+        // })
+        // console.log('this should be just user data from our api now', response);
+        this.setState({
+          name: response.data.name,
+          username: response.data.username,
+          avatar_url: response.data.avatar_url
+        });
+        localStorage.setItem('DASHNOTES_AUTH_CODE', response.data.auth_code);
       })
       .catch((e) => { console.log(e, "errrorr");})
     } else {
@@ -48,7 +72,7 @@ class App extends React.Component {
   }
 
   getStickies() {
-    const token = localStorage.getItem('REACT_TOKEN_AUTH')
+    const token = localStorage.getItem('DASHNOTES_AUTH_CODE')
     axios.get(`${URL}/stickies`, {
       headers: {
         'Content-Type': 'application/json',
@@ -71,9 +95,6 @@ class App extends React.Component {
   }
 
   onLoginButtonClick = (event) => {
-    console.log(process.env.REACT_APP_GITHUB_CLIENT_SECRET)
-    // const url = `https://github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}`
-    
     // auth with BE logic and get a user auth_token. save it to localstorage
     const url = `${URL}/authenticate/${this.state.username}`
 
@@ -82,8 +103,8 @@ class App extends React.Component {
       })
       .then((response) => {
         console.log('asfasdfasdf', response)
-        // localStorage.setItem('REACT_TOKEN_AUTH', JSON.stringify(response.data.authenticate));
-        localStorage.setItem('REACT_TOKEN_AUTH', response.data.authenticate);
+        // localStorage.setItem('DASHNOTES_AUTH_CODE', JSON.stringify(response.data.authenticate));
+        localStorage.setItem('DASHNOTES_AUTH_CODE', response.data.authenticate);
       })
       .catch((error) => {
         console.log('nooo', error)
@@ -91,17 +112,11 @@ class App extends React.Component {
   }
 
   onLogoutButtonClick = (event) => {
-    localStorage.setItem('REACT_TOKEN_AUTH', null);
-  }
-
-  onChangeName = (event) => {
-    this.setState({
-      username: event.target.value
-    })
+    localStorage.removeItem('DASHNOTES_AUTH_CODE');
   }
 
   getMyStickies() {
-    const token = localStorage.getItem('REACT_TOKEN_AUTH')
+    const token = localStorage.getItem('DASHNOTES_AUTH_CODE')
     axios.get(`${URL}/my-stickies`, {
       headers: {
         'Content-Type': 'application/json',
@@ -125,7 +140,7 @@ class App extends React.Component {
 
     console.log('lolololasfjlksdjf', this.state.newSticky);
 
-    const token = localStorage.getItem('REACT_TOKEN_AUTH')
+    const token = localStorage.getItem('DASHNOTES_AUTH_CODE')
     axios.post(`${URL}/my-stickies`, {
       body: this.state.newSticky
     }, {
@@ -135,7 +150,9 @@ class App extends React.Component {
     }})
     .then((response) => {
       console.log('response', response);
-      this.getMyStickies();
+      this.setState({
+        stickies: [...this.state.stickies, response.data.sticky]
+      })
     })
     .catch((error) => {
 
@@ -167,12 +184,10 @@ class App extends React.Component {
         <h1>{this.state.name}</h1>
         <h2>{this.state.username}</h2>
         <img src={this.state.avatar_url} alt="lol" />
-        <input type="text" onChange={this.onChangeName}></input>
         <p>{this.state.token}</p>
         <a
             href={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}`}
           >Login to GitHub</a>
-        <button onClick={this.onLoginButtonClick}>BUTTON LOGIN</button>
         <button onClick={this.onLogoutButtonClick}>BUTTON LOGOUT</button>
 
 
