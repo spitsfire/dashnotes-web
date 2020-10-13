@@ -1,6 +1,6 @@
 const prod = {
   url: {
-    API_URL: 'https://boiling-savannah-43005.herokuapp.com/',
+    API_URL: 'https://boiling-savannah-43005.herokuapp.com',
   }
 };
 
