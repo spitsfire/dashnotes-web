@@ -13,8 +13,7 @@ class App extends React.Component {
     super();
     this.state = {
       stickies: [],
-      username: 'default',
-      newSticky: ''
+      newStickyBody: ''
     }
   }
 
@@ -34,30 +33,20 @@ class App extends React.Component {
         }
       })
       .then((response) => {
-        console.log('response', response);
         this.setState({
           name: response.data.name,
           username: response.data.username,
           avatar_url: response.data.avatar_url
         });
       })
-      .catch((error) => {
-
-      });
+      .catch((e) => { console.log('getting details about the user from be didn\'t work', e); });
     } else if (code) {
-      console.log(code);
       axios.post(`${URL}/auth/callback/gh/${code}`, {
         code: code,
       }, {
         headers: { "Access-Control-Allow-Headers": "X-Requested-With, content-type" }
       })
       .then((response) => {
-        console.log('this should be a cool encoded token')
-        console.log(response);
-        // axios.post(`${URL}/getUser`, {
-        //   access_token: response.
-        // })
-        // console.log('this should be just user data from our api now', response);
         this.setState({
           name: response.data.name,
           username: response.data.username,
@@ -65,9 +54,9 @@ class App extends React.Component {
         });
         localStorage.setItem('DASHNOTES_AUTH_CODE', response.data.auth_code);
       })
-      .catch((e) => { console.log(e, "errrorr");})
+      .catch((e) => { console.log("going through gh oauth cycle without saved login info didn't work", e);})
     } else {
-      console.log("NO CODE");
+      console.log("no login info saved, or haven't just gone through gh oauth callback");
     }
   }
 
@@ -80,39 +69,11 @@ class App extends React.Component {
       }
     })
     .then((response) => {
-      console.log('response', response);
       this.setState({
         stickies: response.data.stickies
       })
     })
-    .catch((error) => {
-
-    });
-  }
-  
-  onGetStickiesClick = (event) => {
-    this.getStickies();
-  }
-
-  onLoginButtonClick = (event) => {
-    // auth with BE logic and get a user auth_token. save it to localstorage
-    const url = `${URL}/authenticate/${this.state.username}`
-
-      axios.get(url, {
-        headers: { 'Content-Type': 'application/json' }
-      })
-      .then((response) => {
-        console.log('asfasdfasdf', response)
-        // localStorage.setItem('DASHNOTES_AUTH_CODE', JSON.stringify(response.data.authenticate));
-        localStorage.setItem('DASHNOTES_AUTH_CODE', response.data.authenticate);
-      })
-      .catch((error) => {
-        console.log('nooo', error)
-      });
-  }
-
-  onLogoutButtonClick = (event) => {
-    localStorage.removeItem('DASHNOTES_AUTH_CODE');
+    .catch((e) => { console.log("getting all stickies didn't work", e); });
   }
 
   getMyStickies() {
@@ -124,48 +85,48 @@ class App extends React.Component {
       }
     })
     .then((response) => {
-      console.log('response', response);
       this.setState({
         stickies: response.data.stickies
       })
     })
-    .catch((error) => {
+    .catch((e) => { console.log("getting my stickies didn't work", e); });
+  }
+  
+  onGetStickiesClick = (event) => {
+    this.getStickies();
+  }
 
-    });
+  onLogoutButtonClick = (event) => {
+    localStorage.removeItem('DASHNOTES_AUTH_CODE');
   }
 
   onSubmitNewSticky = (event) => {
-    if (this.state.newSticky === '') { return; }
+    if (this.state.newStickyBody === '') { return; }
     event.preventDefault();
-
-    console.log('lolololasfjlksdjf', this.state.newSticky);
 
     const token = localStorage.getItem('DASHNOTES_AUTH_CODE')
     axios.post(`${URL}/my-stickies`, {
-      body: this.state.newSticky
+      body: this.state.newStickyBody
     }, {
       headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     }})
     .then((response) => {
-      console.log('response', response);
       this.setState({
         stickies: [...this.state.stickies, response.data.sticky]
       })
     })
-    .catch((error) => {
-
-    });
+    .catch((e) => { console.log("creating a new sticky didn't work", e); });
   }
 
   onClickMyStickies = (event) => {
     this.getMyStickies();
   }
 
-  onChangeNewSticky = (event) => {
+  onChangeNewStickyBody = (event) => {
     this.setState({
-      newSticky: event.target.value
+      newStickyBody: event.target.value
     })
   }
 
@@ -193,7 +154,7 @@ class App extends React.Component {
 
         <form onSubmit={this.onSubmitNewSticky}>
           <label htmlFor="new-sticky">New sticky</label>
-          <input type="text" onChange={this.onChangeNewSticky} name="new-sticky"></input>
+          <input type="text" onChange={this.onChangeNewStickyBody} name="new-sticky"></input>
           <input type="submit"></input>
         </form>
 
