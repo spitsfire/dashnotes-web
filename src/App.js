@@ -48,14 +48,6 @@ class App extends React.Component {
         headers: { "Access-Control-Allow-Headers": "X-Requested-With, content-type" }
       })
       .then((response) => {
-        this.setState({
-          user: {
-            name: response.data.name,
-            username: response.data.username,
-            avatar_url: response.data.avatar_url
-          },
-          stickies: response.data.stickies
-        });
         localStorage.setItem('DASHNOTES_AUTH_CODE', response.data.auth_code);
       })
       .catch((e) => { console.log("going through gh oauth cycle without saved login info didn't work", e);})
