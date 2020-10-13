@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/dashnotes-web/static/css/main.5f361e03.chunk.css",
-    "main.js": "/dashnotes-web/static/js/main.57e0c849.chunk.js",
-    "main.js.map": "/dashnotes-web/static/js/main.57e0c849.chunk.js.map",
+    "main.js": "/dashnotes-web/static/js/main.61a11fe8.chunk.js",
+    "main.js.map": "/dashnotes-web/static/js/main.61a11fe8.chunk.js.map",
     "runtime-main.js": "/dashnotes-web/static/js/runtime-main.5a894874.js",
     "runtime-main.js.map": "/dashnotes-web/static/js/runtime-main.5a894874.js.map",
     "static/js/2.f23ca445.chunk.js": "/dashnotes-web/static/js/2.f23ca445.chunk.js",
     "static/js/2.f23ca445.chunk.js.map": "/dashnotes-web/static/js/2.f23ca445.chunk.js.map",
     "index.html": "/dashnotes-web/index.html",
-    "precache-manifest.ace666b3a4538ee66771bc795566834a.js": "/dashnotes-web/precache-manifest.ace666b3a4538ee66771bc795566834a.js",
+    "precache-manifest.702d1e89f5c507174351e4df9e151222.js": "/dashnotes-web/precache-manifest.702d1e89f5c507174351e4df9e151222.js",
     "service-worker.js": "/dashnotes-web/service-worker.js",
     "static/css/main.5f361e03.chunk.css.map": "/dashnotes-web/static/css/main.5f361e03.chunk.css.map",
     "static/js/2.f23ca445.chunk.js.LICENSE.txt": "/dashnotes-web/static/js/2.f23ca445.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.5a894874.js",
     "static/js/2.f23ca445.chunk.js",
     "static/css/main.5f361e03.chunk.css",
-    "static/js/main.57e0c849.chunk.js"
+    "static/js/main.61a11fe8.chunk.js"
   ]
 }
