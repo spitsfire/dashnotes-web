@@ -1,6 +1,6 @@
 {
   "name": "dashnotes-web",
-  "homepage": "http://tildeee.github.io/dashnotes-web"
+  "homepage": "http://tildeee.github.io/dashnotes-web",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
