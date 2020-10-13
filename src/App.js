@@ -34,9 +34,11 @@ class App extends React.Component {
       })
       .then((response) => {
         this.setState({
-          name: response.data.name,
-          username: response.data.username,
-          avatar_url: response.data.avatar_url
+          user: {
+            name: response.data.name,
+            username: response.data.username,
+            avatar_url: response.data.avatar_url
+          }
         });
       })
       .catch((e) => { console.log('getting details about the user from be didn\'t work', e); });
@@ -48,9 +50,11 @@ class App extends React.Component {
       })
       .then((response) => {
         this.setState({
-          name: response.data.name,
-          username: response.data.username,
-          avatar_url: response.data.avatar_url
+          user: {
+            name: response.data.name,
+            username: response.data.username,
+            avatar_url: response.data.avatar_url
+          }
         });
         localStorage.setItem('DASHNOTES_AUTH_CODE', response.data.auth_code);
       })
@@ -98,6 +102,10 @@ class App extends React.Component {
 
   onLogoutButtonClick = (event) => {
     localStorage.removeItem('DASHNOTES_AUTH_CODE');
+    this.setState({
+      stickies: [],
+      user: null
+    })
   }
 
   onSubmitNewSticky = (event) => {
@@ -142,29 +150,42 @@ class App extends React.Component {
 
     return (
       <div>
-        <h1>{this.state.name}</h1>
-        <h2>{this.state.username}</h2>
-        <img src={this.state.avatar_url} alt="lol" />
-        <p>{this.state.token}</p>
-        <a
-            href={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}`}
-          >Login to GitHub</a>
-        <button onClick={this.onLogoutButtonClick}>BUTTON LOGOUT</button>
+
+        <nav>
+          <ul>
+            <li>
+              <a href={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}`}>Login to GitHub</a>
+            </li>
+            <li>
+              <button onClick={this.onLogoutButtonClick}>Log Out</button>
+            </li>
+          </ul>
+        </nav>
 
 
-        <form onSubmit={this.onSubmitNewSticky}>
-          <label htmlFor="new-sticky">New sticky</label>
-          <input type="text" onChange={this.onChangeNewStickyBody} name="new-sticky"></input>
-          <input type="submit"></input>
-        </form>
+        <section>
+          <h1>Welcome{ this.state.user ? ` back, ${this.state.user.name} (${this.state.user.username})!` : '!'}</h1>
+          { this.state.user ? <img src={this.state.user.avatar_url} alt="lol" /> : '' }
+        </section>
 
-        <button onClick={this.onClickMyStickies}>Get MY Stickies</button>
+
+        <section>
+          <h2>My Stickies</h2>
+          <button onClick={this.onClickMyStickies}>Get My Stickies</button>
+          <ul>
+            {stickies}
+          </ul>
+          <form onSubmit={this.onSubmitNewSticky}>
+            <h3>
+              <label htmlFor="new-sticky">Write a New Sticky</label>
+            </h3>
+            <input type="text" onChange={this.onChangeNewStickyBody} name="new-sticky"></input>
+            <input type="submit"></input>
+          </form>
+        </section>
+
+
         <button onClick={this.onGetStickiesClick}>Get ALL Stickies</button>
-
-        <h2>Stickies</h2>
-        <ul>
-          {stickies}
-        </ul>
 
       </div>
     );
